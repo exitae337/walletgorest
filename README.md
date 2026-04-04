@@ -1,0 +1,1 @@
+Go wallet REST App -> 1000 RPS

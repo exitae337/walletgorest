@@ -1,0 +1,8 @@
+# Bin files
+/bin/
+/dist/
+*.exe
+
+# IDE
+.idea/
+.vscode/
