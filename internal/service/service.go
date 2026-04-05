@@ -26,3 +26,7 @@ func (w *WalletService) Deposit(ctx context.Context, amount int, id uuid.UUID) e
 func (w *WalletService) Withdraw(ctx context.Context, amount int, id uuid.UUID) error {
 	return w.repo.WithdrawMoney(ctx, amount, id)
 }
+
+func (w *WalletService) GetAmount(ctx context.Context, id uuid.UUID) (int, error) {
+	return w.repo.GetAmountOfMoney(ctx, id)
+}
