@@ -53,7 +53,20 @@ func New(ctx context.Context, cfg *config.Config, logger *slog.Logger) (*Storage
 		return nil, err
 	}
 
-	logger.Info("database pool connected",
+	createTableSQL := `
+    CREATE TABLE IF NOT EXISTS walletdb (
+        walletid UUID PRIMARY KEY,
+        amount INTEGER NOT NULL DEFAULT 0 CHECK (amount >= 0)
+    );
+    CREATE INDEX IF NOT EXISTS idx_walletid ON walletdb(walletid);
+    `
+
+	if _, err := pool.Exec(ctx, createTableSQL); err != nil {
+		pool.Close()
+		return nil, fmt.Errorf("failed to create table: %w", err)
+	}
+
+	logger.Info("database pool connected, table created",
 		"max_conns", poolConfig.MaxConns,
 		"min_conns", poolConfig.MinConns,
 		"max_conn_lifetime", poolConfig.MaxConnLifetime,
