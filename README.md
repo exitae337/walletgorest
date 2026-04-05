@@ -53,6 +53,24 @@ curl http://localhost:8080/api/v1/wallets/ваш-uuid
 go test -v ./...
 ```
 
+Для тестирования 1000 RPS использовалась утилита wrk:
+```bash
+wrk -t4 -c1000 -d10s --rate 1000 http://localhost:8080/api/v1/wallets/{wallet_uuid}
+```
+
+Для проверки 1000 RPS при обновлении баланса кошелька:
+
+``` test.lua
+wrk.method = "POST"
+wrk.body = '{"walletId": "93f21b3a-70d7-46fb-a2a5-ae90291d5c33", "operationType": "DEPOSIT", "amount": 10}'
+wrk.headers["Content-Type"] = "application/json"
+```
+
+Запуск:
+``` bash
+wrk -t10 -c1000 -d10s -s test.lua http://localhost:8080/api/v1/wallet 
+```
+
 Остановка
 ```bash
 docker compose down
