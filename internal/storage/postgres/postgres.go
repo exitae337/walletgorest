@@ -15,7 +15,6 @@ const (
 	maxConnIdleTime   = 2 * time.Minute
 	healthCheckPeriod = 1 * time.Minute
 	connectionTimeout = 5 * time.Second
-	appName           = "walletgorest"
 )
 
 type Storage struct {
@@ -41,7 +40,6 @@ func New(ctx context.Context, cfg *config.Config, logger *slog.Logger) (*Storage
 	poolConfig.HealthCheckPeriod = healthCheckPeriod
 
 	poolConfig.ConnConfig.ConnectTimeout = connectionTimeout
-	poolConfig.ConnConfig.RuntimeParams["app_name"] = appName
 
 	pool, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
