@@ -82,7 +82,14 @@ func (h *WalletHandler) OpearationWallet(w http.ResponseWriter, r *http.Request)
 	}
 
 	if err != nil {
-		respondWithError(w, err.Error(), http.StatusBadRequest)
+		switch err.Error() {
+		case "insufficient funds":
+			respondWithError(w, err.Error(), http.StatusBadRequest)
+		case "wallet not found":
+			respondWithError(w, err.Error(), http.StatusNotFound)
+		default:
+			respondWithError(w, "internal server error", http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -108,7 +115,11 @@ func (h *WalletHandler) GetAmount(w http.ResponseWriter, r *http.Request) {
 
 	amount, err := h.serv.GetAmount(r.Context(), walletID)
 	if err != nil {
-		respondWithError(w, err.Error(), http.StatusBadRequest)
+		if err.Error() == "wallet not found" {
+			respondWithError(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		respondWithError(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
 
