@@ -8,6 +8,13 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type WalletRepo interface {
+	GetAmountOfMoney(ctx context.Context, id uuid.UUID) (int, error)
+	WithdrawMoney(ctx context.Context, amount int, id uuid.UUID) error
+	DepositMoney(ctx context.Context, amount int, id uuid.UUID) error
+	CreateWallet(ctx context.Context, id uuid.UUID, initialAmount int) error
+}
+
 type WalletRepository struct {
 	storage *Storage
 }

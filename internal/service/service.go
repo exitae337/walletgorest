@@ -8,10 +8,10 @@ import (
 )
 
 type WalletService struct {
-	repo *postgres.WalletRepository
+	repo postgres.WalletRepo
 }
 
-func NewWalletService(repo *postgres.WalletRepository) *WalletService {
+func NewWalletService(repo postgres.WalletRepo) *WalletService {
 	return &WalletService{repo: repo}
 }
 
